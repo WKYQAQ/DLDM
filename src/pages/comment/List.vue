@@ -52,7 +52,7 @@ import querystring from 'querystring'
 export default {
     methods:{
         loadData(){
-            let url="http://localhost:6677/comment/findAll"
+            let url="http://134.175.154.93::6677/comment/findAll"
             request.get(url).then((response)=>{
                this.comment=response.data;
             })
@@ -62,7 +62,7 @@ export default {
         submitHandler(){
             // this.form 对象--字符串-->后台
             // 通过request与后台交互，并且携带参数
-            let url="http://localhost:6677/comment/saveOrUpdate";
+            let url="http://134.175.154.93:6677/comment/saveOrUpdate";
             request({
                 url,
                 method:"POST",
@@ -99,7 +99,7 @@ export default {
             type: 'warning'
             }).then(() => {
                 //   调用后台接口完成删除
-                let url="http://localhost:6677/comment/deleteById?id="+id;
+                let url="http://134.175.154.93::6677/comment/deleteById?id="+id;
                 request.get(url).then((response)=>{
                     // 刷新数据
                     this.loadData();
