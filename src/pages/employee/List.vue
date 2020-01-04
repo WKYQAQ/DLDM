@@ -110,7 +110,7 @@ export default {
             type: 'warning'
            }).then(() => {
                 //   调用后台接口完成删除
-                let url="http://134.175.154.93:6677/customer/deleteById?id="+id;
+                let url="http://localhost:6677/customer/deleteById?id="+id;
                 request.get(url).then((response)=>{
                     // 刷新数据
                     this.loadData();

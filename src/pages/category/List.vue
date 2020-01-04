@@ -66,7 +66,7 @@ export default {
 //用于存放网页中需要调用的方法
     methods:{
       loaddata(){
-        let url = "http://134.175.154.93:6677/category/findAll"
+        let url = "http://localhost:6677/category/findAll"
                 request.get(url).then((response)=>{
                     //将查询结果放置到category中,then()中使用“=>”保证this指向外部函数的this。👆
                     this.category=response.data;
@@ -75,7 +75,7 @@ export default {
       //this.form对象---字符串--->后台
       //通过request有后台进行交互，并且要携带参数
         submitHandler(){
-            let url="http://134.175.154.93:6677/category/saveOrUpdate";
+            let url="http://localhost:6677/category/saveOrUpdate";
             request({
               url,
               method:"POST",
@@ -101,7 +101,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let url="http://134.175.154.93:6677/category/deleteById?id="+id;
+          let url="http://localhost:6677/category/deleteById?id="+id;
           request.get(url).then((response)=>{
                   this.loaddata();
                   this.$message({
