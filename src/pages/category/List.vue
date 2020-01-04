@@ -6,7 +6,10 @@
     <el-table-column prop="id" label="编号"></el-table-column>
     <el-table-column prop="name" label="名称"></el-table-column>
     <el-table-column prop="num" label="数字"></el-table-column>
-    <el-table-column prop="icon" label="图标"></el-table-column>
+    <el-table-column prop="icon" label="图标">
+    <template   slot-scope="scope">            
+                    <img :src="scope.row.icon"  min-width="70" height="70" />
+                 </template> </el-table-column>
     <el-table-column prop="parentId" label="父栏"></el-table-column>
     
     <el-table-column label="操作">
