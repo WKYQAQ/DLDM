@@ -38,7 +38,10 @@
   width="30%">
     {{form}}
   <el-form :model="form" label-width="80px">
-      <el-form-item label="所属栏目">
+            <el-form-item label="产品名">
+         <el-input type="name" v-model="form.name"/>
+      </el-form-item>
+            <el-form-item label="所属栏目">
          <el-select v-model="form.categoryId">
             <el-option
                  v-for="item in options"
@@ -46,9 +49,6 @@
                  :label="item.name"
                  :value="item.id">
             </el-option></el-select></el-form-item>
-            <el-form-item label="产品名">
-         <el-input type="name" v-model="form.name"/>
-      </el-form-item>
             <el-form-item label="产品状态">
               <el-radio-group v-model="form.status">
     <el-radio label="正常">正常</el-radio>
@@ -56,7 +56,7 @@
   </el-radio-group>
         </el-form-item>
             <el-form-item label="产品说明">
-          <el-input v-model="form.description"/>
+          <el-input type ="textarea" v-model="form.description"/>
         </el-form-item>
             <el-form-item label="价格">
           <el-input v-model="form.price"/>
