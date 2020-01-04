@@ -62,7 +62,7 @@ export default {
         submitHandler(){
             // this.form 对象--字符串-->后台
             // 通过request与后台交互，并且携带参数
-            let url="localhost:6677/comment/saveOrUpdate";
+            let url="http://localhost:6677/comment/saveOrUpdate";
             request({
                 url,
                 method:"POST",
