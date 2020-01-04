@@ -6,12 +6,12 @@
 <!--/按钮-->
 <!--表格-->
 <el-table :data="product"><!--为是啥用：data？答：详情element，表格-->
-    <el-table-column fixed="left" prop="categoryId" label="分类编号"></el-table-column>
+    <el-table-column fixed="left" prop="categoryId" label="所属栏目"></el-table-column>
     <el-table-column fixed="left" prop="id" label="编号"></el-table-column>
     <el-table-column fixed="left" prop="name" label="产品名"></el-table-column>
     <el-table-column fixed="left" prop="price" label="价格"></el-table-column>
     <el-table-column prop="status" label="产品状态"></el-table-column>
-    <el-table-column width="120" prop="description" label="产品说明"></el-table-column>
+    <el-table-column width="120" type="textarea" prop="description" label="产品说明"></el-table-column>
     <el-table-column width="200" prop="photo" label="产品照片">
         <template   slot-scope="scope">            
                     <img :src="scope.row.photo"  min-width="70" height="70" />
@@ -38,6 +38,14 @@
   width="30%">
     {{form}}
   <el-form :model="form" label-width="80px">
+      <el-form-item label="所属栏目">
+         <el-select v-model="form.categoryId">
+            <el-option
+                 v-for="item in options"
+                 :key="item.id"
+                 :label="item.name"
+                 :value="item.id">
+            </el-option></el-select></el-form-item>
             <el-form-item label="产品名">
          <el-input type="name" v-model="form.name"/>
       </el-form-item>
@@ -70,10 +78,6 @@ import querystring from 'querystring'
 import request from "@/utils/request"
 export default {
     methods:{
-        upLoad() {
-      // 触发上传图片按钮
-      this.$refs.avatarInput.dispatchEvent(new MouseEvent("click"));
-    },
         submitHandler(){
             let url="http://localhost:6677/product/saveOrUpdate"
             //前端后台发送请求，完成数据的保存操作
@@ -95,6 +99,13 @@ export default {
             })   
                 })
         },
+        loadcategory(){
+      let url = "http://localhost:6677/category/findAll"
+      request.get(url).then((response)=>{
+        // 将查询结果设置到products中，this指向外部函数的this
+        this.options = response.data;
+      })
+    },
         loaddata(){
             let url = "http://localhost:6677/product/findAll"
             request.get(url).then((response)=>{
@@ -138,6 +149,7 @@ export default {
         return{
             visible:false,
             product:[],
+            options:[],
             form:{
                 type:"product"
             },
@@ -147,6 +159,7 @@ export default {
     },
     created(){
         this.loaddata();
+        this.loadcategory();
     }
 }
 </script>

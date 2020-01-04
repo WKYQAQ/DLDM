@@ -2,7 +2,7 @@
 <div>
     <el-button type="success" size="small" @click="toAddHandler">添加</el-button>
     <el-button type="danger" size="small">批量删除</el-button>
-<el-table :data="order">
+<el-table :data="order.list">
     <el-table-column prop="id" label="编号"></el-table-column>
     <el-table-column prop="orderTime" label="订单时间"></el-table-column>
     <el-table-column prop="total" label="数量"></el-table-column>
@@ -17,12 +17,13 @@
         </template>
     </el-table-column>
 </el-table>
- <!--分页-->
-<el-pagination
-    layout="prev, pager, next"
-    :total="1000">
-  </el-pagination>
-  <!--分页结束-->
+ <!-- 分页开始 -->
+    <el-pagination 
+        layout="prev, pager, next" 
+        :total="order.total" 
+        @current-change="pageChageHandler">
+        </el-pagination>
+    <!-- /分页结束 -->
    <!--模态框-->
   <el-dialog
   :title="title"
@@ -66,20 +67,33 @@ import request from '@/utils/request'
 export default {
 //用于存放网页中需要调用的方法
     methods:{
+       pageChageHandler(page){
+        // 将params中当前页改为插件中的当前页
+        this.params.page = page-1;
+        // 加载
+        this.loaddata();
+    },
       loaddata(){
-        let url = "http://localhost:6677/order/findAll"
-                request.get(url).then((response)=>{
-                    //将查询结果放置到customers中,then()中使用“=>”保证this指向外部函数的this。👆
-                    this.order=response.data;
-                })
-      },
+      let url = "http://localhost:6677/order/queryPage"
+      request({
+          url,
+          method:"post",
+          headers:{
+              "Content-Type":"application/x-www-form-urlencoded"
+          },
+          data:querystring.stringify(this.params)
+      }).then((response)=>{
+          // order为一个对象，其中包含了分页信息，以及列表信息
+          this.order = response.data;
+      })
+    },
       //this.form对象---字符串--->后台
       //通过request有后台进行交互，并且要携带参数
         submitHandler(){
             let url="http://localhost:6677/order/save";
             request({
               url,
-              method:"POST",
+              method:"post",
               headers:{
                 "Content-Type":"application/x-www-form-urlencoded"
               },
@@ -134,9 +148,13 @@ export default {
         return{
             title:"添加订单信息",
             visible:false,
-            order:[],
+            order:{},
             form:{
               type:"order"
+            },
+            params:{
+              page:0,
+              pageSize:10
             }
             }
     },
