@@ -4,9 +4,10 @@
     <el-button type="danger" size="small">批量删除</el-button>
 <el-table :data="order.list">
     <el-table-column prop="id" label="编号"></el-table-column>
-    <el-table-column prop="orderTime" label="订单时间"></el-table-column>
+    <el-table-column prop="orderTime" label="下单时间"></el-table-column>
     <el-table-column prop="total" label="数量"></el-table-column>
     <el-table-column prop="remark" label="注意"></el-table-column>
+    <el-table-column prop="status" label="状态"></el-table-column>
     <el-table-column prop="customerId" label="顾客编号"></el-table-column>
     <el-table-column prop="waiterId" label="员工编号"></el-table-column>
     <el-table-column prop="addressId" label="地址编号"></el-table-column>
