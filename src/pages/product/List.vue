@@ -38,31 +38,39 @@
   width="30%">
     {{form}}
   <el-form :model="form" label-width="80px">
-            <el-form-item label="产品名">
+        <el-form-item label="产品名">
          <el-input type="name" v-model="form.name"/>
-      </el-form-item>
-            <el-form-item label="所属栏目">
-         <el-select v-model="form.categoryId">
+        </el-form-item>
+        <el-form-item label="所属栏目">
+        <el-select v-model="form.categoryId">
             <el-option
                  v-for="item in options"
                  :key="item.id"
                  :label="item.name"
                  :value="item.id">
             </el-option></el-select></el-form-item>
-            <el-form-item label="产品状态">
-              <el-radio-group v-model="form.status">
-    <el-radio label="正常">正常</el-radio>
-    <el-radio label="不正常">不正常</el-radio>
-  </el-radio-group>
+        <el-form-item label="产品状态">
+          <el-radio-group v-model="form.status">
+          <el-radio label="正常">正常</el-radio>
+          <el-radio label="不正常">不正常</el-radio>
+          </el-radio-group>
         </el-form-item>
-            <el-form-item label="产品说明">
+        <el-form-item label="产品说明">
           <el-input type ="textarea" v-model="form.description"/>
         </el-form-item>
-            <el-form-item label="价格">
+        <el-form-item label="价格">
           <el-input v-model="form.price"/>
         </el-form-item>
-                    <el-form-item label="产品照片">
-          <el-input  v-model="form.photo"/>
+        <el-form-item label="产品照片">
+          <el-upload
+            class="upload-demo"
+            action="http://134.175.154.93:6677/file/upload"
+            :on-success="uploadsuccessHandler"
+            :file-list="fileList"
+            list-type="picture">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>    
   </el-form>
   <span slot="footer" class="dialog-footer">
@@ -78,18 +86,24 @@ import querystring from 'querystring'
 import request from "@/utils/request"
 export default {
     methods:{
+      //上传成功事件处理函数
+        uploadsuccessHandler(response){
+          let photo = "http://134.175.154.93:8888/group1/"+response.data.id
+          //将图片地址设置到form中，便于一起提交到后台
+          this.form.photo=photo;
+        },
         submitHandler(){
             let url="http://localhost:6677/product/saveOrUpdate"
             //前端后台发送请求，完成数据的保存操作
-            request({
-                url,
-                method:"POST",
-                //告诉给后台我的请求中放的是查询字符串
-                headers:{
-                    "Content-Type":"application/x-www-form-urlencoded"
-                },
-                //请求体中的数据,将this.form转换未查询字符串发送给后台
-                data:querystring.stringify(this.form)}).then((response)=>{
+        request({
+            url,
+            method:"POST",
+            //告诉给后台我的请求中放的是查询字符串
+            headers:{
+                "Content-Type":"application/x-www-form-urlencoded"
+            },
+            //请求体中的数据,将this.form转换未查询字符串发送给后台
+            data:querystring.stringify(this.form)}).then((response)=>{
             //请求结束
             this.closeModalHandler();
             this.loaddata();
@@ -138,6 +152,7 @@ export default {
             this.visible=false;
         },  
         toAddHandler(){
+            this.filelist=[],
             this.form={
               type:"product"
             }
@@ -149,6 +164,7 @@ export default {
         return{
             visible:false,
             product:[],
+            fileList:[],
             options:[],
             form:{
                 type:"product"
