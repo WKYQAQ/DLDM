@@ -2,7 +2,7 @@
   <div>
     {{params}}
     <!-- 选项卡 -->
-    <el-tabs v-model="params.status" @tab-click="loadData">
+    <el-tabs v-model="params.status" @tab-click="loaddata">
       <el-tab-pane label="全部" name="全部"></el-tab-pane>
       <el-tab-pane label="待派单" name="待派单"></el-tab-pane>
       <el-tab-pane label="待接单" name="待接单"></el-tab-pane>
@@ -12,7 +12,7 @@
     </el-tabs>
     <!-- /选项卡 -->
     <!-- 表格 -->
-    <el-table :data="orders.list">
+    <el-table :data="order.list">
       <el-table-column prop="id" label="编号"></el-table-column>
       <el-table-column width="200" prop="orderTime" label="下单时间"></el-table-column>
       <el-table-column prop="total" label="总价"></el-table-column>
@@ -33,7 +33,7 @@
     <el-pagination 
         :hide-on-single-page="true"
         layout="prev, pager, next" 
-        :total="orders.total" 
+        :total="order.total" 
         @current-change="pageChageHandler">
         </el-pagination>
     <!-- /分页结束 -->
@@ -81,7 +81,7 @@ export default {
         // 将params中当前页改为插件中的当前页
         this.params.page = page-1;
         // 加载
-        this.loadData();
+        this.loaddata();
     },
     // 加载员工信息
     loadEmployees(){
@@ -91,7 +91,7 @@ export default {
       })
     },
     // 加载订单信息
-    loadData(){
+    loaddata(){
       let url = "http://localhost:6677/order/queryPage"
       if(this.params.status === "全部"){
         delete this.params.status;
@@ -105,7 +105,7 @@ export default {
           data:querystring.stringify(this.params)
       }).then((response)=>{
           // orders为一个对象，其中包含了分页信息，以及列表信息
-          this.orders = response.data;
+          this.order = response.data;
       })
     },
     submitHandler(){
@@ -121,7 +121,7 @@ export default {
         // 模态框关闭
         this.closeModalHandler();
         // 刷新
-        this.loadData();
+        this.loaddata();
         // 提示消息
         this.$message({
           type:"success",
@@ -143,7 +143,7 @@ export default {
   data(){
     return {
       visible:false,
-      orders:{},
+      order:{},
       form:{},  // 当前订单
       params:{
           page:0,
@@ -156,7 +156,7 @@ export default {
   created(){
     // this为当前vue实例对象
     // vue实例创建完毕 
-    this.loadData();
+    this.loaddata();
     // 加载员工信息
     this.loadEmployees();
   }
